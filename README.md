@@ -36,7 +36,7 @@ Modern Python client for **Moscow Exchange ISS API**.
 
 ## Core
 
-✅ Python 3.11+  
+✅ Python 3.13+  
 ✅ REST ISS API client  
 ✅ Sync API (`requests`)  
 ✅ Async API (`httpx`)  
@@ -601,7 +601,7 @@ Trading System
 Recommended:
 
 ```
-Python >=3.11
+Python >=3.13
 ```
 
 Main dependencies:
