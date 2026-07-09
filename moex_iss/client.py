@@ -63,7 +63,6 @@ class ISSClient:
             max=10,
         ),
     )
-
     def get_json(
         self,
         url: str,
@@ -80,14 +79,10 @@ class ISSClient:
             )
 
         if response.status_code == 429:
-            raise ISSRateLimitError(
-                "Too many requests"
-            )
+            raise ISSRateLimitError("Too many requests")
 
         if response.status_code >= 400:
-            raise ISSResponseError(
-                response.status_code
-            )
+            raise ISSResponseError(response.status_code)
 
         response.raise_for_status()
 

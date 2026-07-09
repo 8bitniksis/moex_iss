@@ -16,11 +16,7 @@ class ISSSession:
 
         self.session = requests.Session()
 
-        self.session.headers.update(
-            {
-                "User-Agent": config.user_agent
-            }
-        )
+        self.session.headers.update({"User-Agent": config.user_agent})
 
     def close(self) -> None:
 
