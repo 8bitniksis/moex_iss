@@ -55,6 +55,8 @@ dependencies = [
     "pytest-cov>=6",
     "build>=1.2",
     "pandas-stubs"
+    "pytest-asyncio",
+    "responses",
 ]
 
 [project.urls]
