@@ -16,7 +16,7 @@ description = "Modern Python client for Moscow Exchange ISS API"
 
 readme = "README.md"
 
-requires-python = ">=3.14"
+requires-python = ">=3.13"
 
 license = { text = "Apache-2.0" }
 
@@ -95,7 +95,7 @@ Repository = "https://github.com/8bitniksis/moex_iss"
 
 [tool.ruff]
 
-target-version = "py314"
+target-version = "py313"
 
 line-length = 88
 
