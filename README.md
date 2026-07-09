@@ -5,6 +5,8 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Ruff](https://img.shields.io/badge/code%20style-ruff-black)](https://github.com/astral-sh/ruff)
 [![mypy](https://img.shields.io/badge/type%20checked-mypy-blue)](https://mypy-lang.org/)
+[![PyPI version](https://img.shields.io/pypi/v/moex-iss.svg)](https://pypi.org/project/moex-iss/)
+[![Downloads](https://img.shields.io/pypi/dm/moex-iss.svg)](https://pypi.org/project/moex-iss/)
 
 Modern Python client for **Moscow Exchange ISS API**.
 
