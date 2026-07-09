@@ -14,8 +14,19 @@ from .auth import ISSAuthenticator
 from .endpoints import EndpointBuilder
 from .pagination import ISSPaginator
 from .dataframe import ISSDataFrame
+from .exceptions import (
+    ISSServerError,
+    ISSRateLimitError,
+    ISSResponseError,
+    ISSConnectionError
+)
 
-
+from tenacity import (
+    retry,
+    retry_if_exception_type,
+    stop_after_attempt,
+    wait_exponential
+)
 
 class ISSClient:
 
@@ -57,31 +68,48 @@ class ISSClient:
         )
 
 
-
     @retry(
+        retry=retry_if_exception_type(
+            (
+                ISSServerError,
+                ISSConnectionError
+            )
+        ),
+
         stop=stop_after_attempt(5),
+
         wait=wait_exponential(
             multiplier=1,
             min=1,
             max=10
         )
     )
+
     def get_json(
         self,
         url
     ):
-
         response = (
             self.session.get(url)
         )
 
 
-        if response.status_code >= 500:
-
-            raise RuntimeError(
+        if 500 <= response.status_code < 600:
+            raise ISSServerError(
+                response.status_code,
                 response.text
             )
 
+        if response.status_code == 429:
+            raise ISSRateLimitError(
+                "Too many requests"
+            )
+
+        if response.status_code >=400:
+
+            raise ISSResponseError(
+                response.status_code
+            )
 
         response.raise_for_status()
 
