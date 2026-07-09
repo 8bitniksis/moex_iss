@@ -3,7 +3,10 @@ import time
 
 
 class RateLimiter:
-    def __init__(self, rate: int = 5):
+    def __init__(
+        self,
+        rate: int = 5,
+    ) -> None:
         """
         rate:
             requests per second
