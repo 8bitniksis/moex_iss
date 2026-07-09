@@ -1,6 +1,7 @@
 # MOEX ISS Python Client
 
 [![CI](https://github.com/8bitniksis/moex_iss/actions/workflows/ci.yml/badge.svg)](https://github.com/8bitniksis/moex_iss/actions/workflows/ci.yml)
+[![CD](https://github.com/8bitniksis/moex_iss/actions/workflows/cd.yml/badge.svg)](https://github.com/8bitniksis/moex_iss/actions/workflows/CD.yml)
 [![Python](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Ruff](https://img.shields.io/badge/code%20style-ruff-black)](https://github.com/astral-sh/ruff)
