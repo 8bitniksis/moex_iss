@@ -1,8 +1,4 @@
-import pandas as pd
-
 from moex_iss import ISSClient
-
-
 
 def add_features(df):
 
