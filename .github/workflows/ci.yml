@@ -1,5 +1,4 @@
-name: MOEX ISS CI
-
+name: CI
 
 on:
   push:
@@ -16,89 +15,43 @@ jobs:
 
   test:
 
-    name: Test Python ${{ matrix.python-version }}
-
     runs-on: ubuntu-latest
-
-
-    strategy:
-
-      matrix:
-        python-version:
-          - "3.11"
-          - "3.12"
-          - "3.13"
-
 
     steps:
 
-    - name: Checkout repository
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
+    - uses: actions/setup-python@v5
 
       with:
-        python-version: ${{ matrix.python-version }}
+
+        python-version: "3.15"
 
 
-    - name: Upgrade pip
-
-      run:
-
-        python -m pip install --upgrade pip
-
-
-    - name: Install dependencies
+    - name: Install
 
       run:
 
-        pip install -r requirements-dev.txt
+        pip install -e ".[dev,test]"
 
 
-    - name: Install package
-
-      run:
-
-        pip install -e .
-
-
-    - name: Ruff lint
+    - name: Ruff
 
       run:
 
         ruff check .
 
 
-    - name: Black check
+    - name: Black
 
       run:
 
         black --check .
 
 
-    - name: MyPy
+    - name: Tests
 
       run:
 
-        mypy moex_iss
-
-
-    - name: Run tests
-
-      run:
-
-        pytest \
-        --cov=moex_iss \
-        --cov-report=xml \
-        --cov-report=term
-
-
-    - name: Upload coverage
-
-      uses: codecov/codecov-action@v4
-
-      with:
-
-        file: ./coverage.xml
+        pytest --cov=moex_iss
