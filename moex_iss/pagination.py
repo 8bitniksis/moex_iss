@@ -1,14 +1,24 @@
+from collections.abc import Iterator
+from typing import Any
+
 from .exceptions import ISSPaginationError
 
 
 class ISSPaginator:
-    def __init__(self, client, chunk_size=100):
+    def __init__(
+        self,
+        client: Any,
+        chunk_size: int = 100,
+    ) -> None:
 
         self.client = client
-
         self.chunk_size = chunk_size
 
-    def iterate(self, url, block):
+    def iterate(
+        self,
+        url: str,
+        block: str,
+    ) -> Iterator[dict[str, Any]]:
 
         start = 0
 
@@ -17,7 +27,7 @@ class ISSPaginator:
 
             request_url = url + separator + f"start={start}"
 
-            response = self.client.get_json(request_url)
+            response: dict[str, Any] = self.client.get_json(request_url)
 
             container = response.get(block)
 

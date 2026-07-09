@@ -1,3 +1,4 @@
+from typing import Any
 from urllib.parse import urlencode
 
 
@@ -5,7 +6,11 @@ class EndpointBuilder:
     def __init__(self, base_url: str):
         self.base_url = base_url.rstrip("/")
 
-    def build(self, path: str, params: dict | None = None) -> str:
+    def build(
+        self,
+        path: str,
+        params: dict[str, Any] | None = None,
+    ) -> str:
 
         url = self.base_url + "/iss" + path + ".json"
 
@@ -14,7 +19,14 @@ class EndpointBuilder:
 
         return url
 
-    def candles(self, engine: str, market: str, board: str, security: str, params=None):
+    def candles(
+        self,
+        engine: str,
+        market: str,
+        board: str,
+        security: str,
+        params: dict[str, Any] | None = None,
+    ) -> str:
 
         path = (
             f"/engines/{engine}"
@@ -26,7 +38,14 @@ class EndpointBuilder:
 
         return self.build(path, params)
 
-    def history_security(self, engine, market, board, security, params=None):
+    def history_security(
+        self,
+        engine: str,
+        market: str,
+        board: str,
+        security: str,
+        params: dict[str, Any] | None = None,
+    ) -> str:
 
         path = (
             f"/history/engines/{engine}"
