@@ -1,10 +1,11 @@
 import requests
+from requests import Response
 
 from .config import ISSConfig
 
 
 class ISSSession:
-    def __init__(self, config: ISSConfig):
+    def __init__(self, config: ISSConfig) -> None:
 
         self.config = config
 
@@ -12,12 +13,19 @@ class ISSSession:
 
         self.session.headers.update({"User-Agent": config.user_agent})
 
-    def close(self):
+    def close(self) -> None:
 
         self.session.close()
 
-    def get(self, url, **kwargs):
+    def get(
+        self,
+        url: str,
+        **kwargs: object,
+    ) -> Response:
 
         return self.session.get(
-            url, timeout=self.config.timeout, verify=self.config.verify_ssl, **kwargs
+            url,
+            timeout=self.config.timeout,
+            verify=self.config.verify_ssl,
+            **kwargs,
         )

@@ -1,17 +1,23 @@
 import base64
 
+from .config import ISSConfig
 from .exceptions import ISSAuthenticationError
+from .session import ISSSession
 
 
 class ISSAuthenticator:
     COOKIE_NAME = "MicexPassportCert"
 
-    def __init__(self, session, config):
+    def __init__(
+        self,
+        session: ISSSession,
+        config: ISSConfig,
+    ) -> None:
 
         self.session = session
         self.config = config
 
-    def authenticate(self):
+    def authenticate(self) -> bool:
 
         if not self.config.authenticated:
             return False
@@ -20,9 +26,12 @@ class ISSAuthenticator:
             (f"{self.config.username}:{self.config.password}").encode()
         ).decode()
 
-        headers = {"Authorization": f"Basic {token}"}
+        headers: dict[str, str] = {"Authorization": f"Basic {token}"}
 
-        response = self.session.get(self.config.auth_url, headers=headers)
+        response = self.session.get(
+            self.config.auth_url,
+            headers=headers,
+        )
 
         if response.status_code != 200:
             raise ISSAuthenticationError(response.text)
