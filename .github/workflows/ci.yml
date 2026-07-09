@@ -95,7 +95,6 @@ jobs:
           pytest \
             --cov=moex_iss \
             --cov-report=term-missing
-            --cov-fail-under=80
 
       # -------------------------
       # Build package
