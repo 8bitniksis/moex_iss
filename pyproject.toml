@@ -141,8 +141,7 @@ indent-style = "space"
 
 [tool.mypy]
 
-python_version = "3.14"
-
+python_version = "3.13"
 
 check_untyped_defs = true
 
@@ -153,6 +152,8 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 
 warn_unused_configs = true
+
+ignore_missing_imports = true
 
 
 # постепенно включим strict после покрытия типов
