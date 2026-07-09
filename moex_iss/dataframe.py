@@ -1,3 +1,5 @@
+from typing import Any
+
 import pandas as pd
 
 from .parser import parse_block
@@ -5,7 +7,10 @@ from .parser import parse_block
 
 class ISSDataFrame:
     @staticmethod
-    def from_block(payload: dict, block: str) -> pd.DataFrame:
+    def from_block(
+        payload: dict[str, Any],
+        block: str,
+    ) -> pd.DataFrame:
 
         parsed = parse_block(block, payload)
 
@@ -16,7 +21,9 @@ class ISSDataFrame:
         return df
 
     @staticmethod
-    def candles(payload: dict) -> pd.DataFrame:
+    def candles(
+        payload: dict[str, Any],
+    ) -> pd.DataFrame:
 
         df = ISSDataFrame.from_block(payload, "candles")
 
@@ -28,6 +35,8 @@ class ISSDataFrame:
         return df
 
     @staticmethod
-    def history(payload: dict) -> pd.DataFrame:
+    def history(
+        payload: dict[str, Any],
+    ) -> pd.DataFrame:
 
         return ISSDataFrame.from_block(payload, "history")

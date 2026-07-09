@@ -1,7 +1,12 @@
+from typing import Any
+
 from .models import ISSBlock
 
 
-def parse_block(name: str, payload: dict) -> ISSBlock:
+def parse_block(
+    name: str,
+    payload: dict[str, Any],
+) -> ISSBlock:
 
     block = payload.get(name)
 
