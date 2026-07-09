@@ -1,7 +1,5 @@
 from moex_iss import ISSClient
 
-
-
 SECURITIES = [
     "SBER",
     "GAZP",

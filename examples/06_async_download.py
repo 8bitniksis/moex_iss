@@ -2,7 +2,6 @@ import asyncio
 
 from moex_iss import AsyncISSClient
 
-
 URLS = [
 
     "https://iss.moex.com/iss/engines.json",

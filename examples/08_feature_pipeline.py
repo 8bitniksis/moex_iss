@@ -1,5 +1,6 @@
 from moex_iss import ISSClient
 
+
 def add_features(df):
 
     df["return"] = (

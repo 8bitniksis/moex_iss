@@ -1,7 +1,6 @@
 from moex_iss.parser import parse_block
 
 
-
 def test_parse_history(
     iss_history_response
 ):

@@ -3,7 +3,6 @@ import base64
 from .exceptions import ISSAuthenticationError
 
 
-
 class ISSAuthenticator:
 
 

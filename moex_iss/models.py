@@ -21,6 +21,7 @@ class ISSBlock:
             yield dict(
                 zip(
                     self.columns,
-                    row
+                    row,
+                    strict=True,
                 )
             )

@@ -1,7 +1,6 @@
 from moex_iss.endpoints import EndpointBuilder
 
 
-
 def test_history_endpoint():
 
 

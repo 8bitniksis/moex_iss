@@ -1,7 +1,6 @@
 from moex_iss.pagination import ISSPaginator
 
 
-
 class MockClient:
 
 

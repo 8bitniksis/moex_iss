@@ -1,7 +1,6 @@
 from moex_iss.dataframe import ISSDataFrame
 
 
-
 def test_history_dataframe(
     iss_history_response
 ):

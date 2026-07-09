@@ -1,7 +1,6 @@
 from .exceptions import ISSPaginationError
 
 
-
 class ISSPaginator:
 
 
@@ -85,7 +84,8 @@ class ISSPaginator:
                 yield dict(
                     zip(
                         columns,
-                        row
+                        row,
+                        strict=True,
                     )
                 )
 

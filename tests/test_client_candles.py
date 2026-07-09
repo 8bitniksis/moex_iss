@@ -1,9 +1,8 @@
 import json
+
 import responses
 
-
 from moex_iss import ISSClient
-
 
 
 @responses.activate

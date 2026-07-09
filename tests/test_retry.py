@@ -3,7 +3,6 @@ import responses
 from moex_iss import ISSClient
 
 
-
 @responses.activate
 def test_retry_on_server_error():
 

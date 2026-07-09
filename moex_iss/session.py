@@ -3,7 +3,6 @@ import requests
 from .config import ISSConfig
 
 
-
 class ISSSession:
 
 

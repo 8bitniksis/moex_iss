@@ -1,7 +1,6 @@
 from moex_iss.dataframe import ISSDataFrame
 
 
-
 def test_candle_dataframe(
     iss_candle_response
 ):

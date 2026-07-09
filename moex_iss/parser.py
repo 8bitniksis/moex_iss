@@ -1,7 +1,6 @@
 from .models import ISSBlock
 
 
-
 def parse_block(
     name: str,
     payload: dict
