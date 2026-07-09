@@ -3,12 +3,7 @@ import time
 
 
 class RateLimiter:
-
-
-    def __init__(
-        self,
-        rate=5
-    ):
+    def __init__(self, rate=5):
         """
         rate:
             requests per second
@@ -20,27 +15,14 @@ class RateLimiter:
 
         self.last_request = 0
 
-
-
     def wait(self):
 
         with self.lock:
-
             now = time.time()
 
-
-            delta = (
-                now
-                -
-                self.last_request
-            )
-
+            delta = now - self.last_request
 
             if delta < self.interval:
-
-                time.sleep(
-                    self.interval-delta
-                )
-
+                time.sleep(self.interval - delta)
 
             self.last_request = time.time()

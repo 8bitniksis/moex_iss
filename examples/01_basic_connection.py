@@ -5,13 +5,9 @@ def main():
 
     client = ISSClient()
 
-    result = client.get(
-        "/engines"
-    )
+    result = client.get("/engines")
 
-    print(
-        result.keys()
-    )
+    print(result.keys())
 
 
 if __name__ == "__main__":

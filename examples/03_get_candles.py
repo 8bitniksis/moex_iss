@@ -5,19 +5,11 @@ def main():
 
     client = ISSClient()
 
-
-    df = client.candles_df(
-        security="GAZP",
-        interval=60
-    )
-
+    df = client.candles_df(security="GAZP", interval=60)
 
     print(df.tail())
 
-
-    df.to_csv(
-        "gazp_1h.csv"
-    )
+    df.to_csv("gazp_1h.csv")
 
 
 if __name__ == "__main__":

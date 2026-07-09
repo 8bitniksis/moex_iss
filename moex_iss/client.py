@@ -22,231 +22,93 @@ from .session import ISSSession
 
 
 class ISSClient:
+    def __init__(self, config: ISSConfig | None = None, rate_limit=5):
 
+        self.config = config or ISSConfig()
 
-    def __init__(
-        self,
-        config: ISSConfig | None = None,
-        rate_limit=5
-    ):
+        self.limiter = RateLimiter(rate_limit)
 
-        self.config = (
-            config
-            or ISSConfig()
-        )
+        self.session = ISSSession(self.config)
 
-        self.limiter = RateLimiter(
-            rate_limit
-        )
-
-        self.session = ISSSession(
-            self.config
-        )
-
-
-        self.auth = ISSAuthenticator(
-            self.session,
-            self.config
-        )
-
+        self.auth = ISSAuthenticator(self.session, self.config)
 
         if self.config.authenticated:
-
             self.auth.authenticate()
 
+        self.endpoint = EndpointBuilder(self.config.base_url)
 
-        self.endpoint = EndpointBuilder(
-            self.config.base_url
-        )
-
-
-        self.paginator = ISSPaginator(
-            self
-        )
-
+        self.paginator = ISSPaginator(self)
 
     @retry(
-        retry=retry_if_exception_type(
-            (
-                ISSServerError,
-                ISSConnectionError
-            )
-        ),
-
+        retry=retry_if_exception_type((ISSServerError, ISSConnectionError)),
         stop=stop_after_attempt(5),
-
-        wait=wait_exponential(
-            multiplier=1,
-            min=1,
-            max=10
-        )
+        wait=wait_exponential(multiplier=1, min=1, max=10),
     )
+    def get_json(self, url):
 
-    def get_json(
-        self,
-        url
-    ):
-        
         self.limiter.wait()
-        
-        response = self.session.get(
-            url
-        )
+
+        response = self.session.get(url)
 
         if 500 <= response.status_code < 600:
-            raise ISSServerError(
-                response.status_code,
-                response.text
-            )
+            raise ISSServerError(response.status_code, response.text)
 
         if response.status_code == 429:
-            raise ISSRateLimitError(
-                "Too many requests"
-            )
+            raise ISSRateLimitError("Too many requests")
 
-        if response.status_code >=400:
-
-            raise ISSResponseError(
-                response.status_code
-            )
+        if response.status_code >= 400:
+            raise ISSResponseError(response.status_code)
 
         response.raise_for_status()
 
-
         return response.json()
 
+    def get(self, path, params=None):
 
-
-    def get(
-        self,
-        path,
-        params=None
-    ):
-
-        url = (
-            self.endpoint.build(
-                path,
-                params
-            )
-        )
-
+        url = self.endpoint.build(path, params)
 
         return self.get_json(url)
 
-
-
     def iter_history(
-        self,
-        engine,
-        market,
-        board,
-        security,
-        from_date=None,
-        till_date=None
+        self, engine, market, board, security, from_date=None, till_date=None
     ):
 
-
         params = {}
-
 
         if from_date:
             params["from"] = from_date
 
-
         if till_date:
             params["till"] = till_date
 
+        url = self.endpoint.history_security(engine, market, board, security, params)
 
-
-        url = (
-            self.endpoint.history_security(
-                engine,
-                market,
-                board,
-                security,
-                params
-            )
-        )
-
-
-        return self.paginator.iterate(
-            url,
-            "history"
-        )
-
-
+        return self.paginator.iterate(url, "history")
 
     def candles(
-        self,
-        security,
-        engine="stock",
-        market="shares",
-        board="TQBR",
-        interval=24
+        self, security, engine="stock", market="shares", board="TQBR", interval=24
     ):
 
-
-        url = (
-            self.endpoint.candles(
-                engine,
-                market,
-                board,
-                security,
-                {
-                    "interval":interval
-                }
-            )
+        url = self.endpoint.candles(
+            engine, market, board, security, {"interval": interval}
         )
-
 
         return self.get_json(url)
-    
+
     def candles_df(
-        self,
-        security,
-        engine="stock",
-        market="shares",
-        board="TQBR",
-        interval=60
+        self, security, engine="stock", market="shares", board="TQBR", interval=60
     ):
 
+        raw = self.candles(security, engine, market, board, interval)
 
-        raw = self.candles(
-            security,
-            engine,
-            market,
-            board,
-            interval
-        )
+        return ISSDataFrame.candles(raw)
 
-
-        return ISSDataFrame.candles(
-            raw
-        )
-    
     def history_df(
-        self,
-        engine,
-        market,
-        board,
-        security,
-        from_date=None,
-        till_date=None
+        self, engine, market, board, security, from_date=None, till_date=None
     ):
-
 
         rows = list(
-            self.iter_history(
-                engine,
-                market,
-                board,
-                security,
-                from_date,
-                till_date
-            )
+            self.iter_history(engine, market, board, security, from_date, till_date)
         )
 
-
-        return pd.DataFrame(
-            rows
-        )
+        return pd.DataFrame(rows)

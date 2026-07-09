@@ -6,29 +6,12 @@ from moex_iss import ISSClient
 @responses.activate
 def test_client_get_json():
 
+    url = "https://iss.moex.com/iss/test.json"
 
-    url = (
-        "https://iss.moex.com"
-        "/iss/test.json"
-    )
-
-
-    responses.add(
-        responses.GET,
-        url,
-        json={
-            "test":"ok"
-        },
-        status=200
-    )
-
+    responses.add(responses.GET, url, json={"test": "ok"}, status=200)
 
     client = ISSClient()
 
+    result = client.session.get(url).json()
 
-    result = client.session.get(
-        url
-    ).json()
-
-
-    assert result["test"]=="ok"
+    assert result["test"] == "ok"
