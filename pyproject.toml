@@ -1,16 +1,15 @@
 [build-system]
 requires = [
-    "setuptools>=75",
-    "wheel"
+    "setuptools>=68",
+    "wheel",
+    "setuptools-scm>=8",
 ]
 build-backend = "setuptools.build_meta"
 
 
 [project]
-
 name = "moex-iss"
-
-version = "1.0.0"
+dynamic = ["version"]
 
 description = "Modern Python client for Moscow Exchange ISS API"
 
@@ -20,65 +19,36 @@ requires-python = ">=3.13"
 
 license = { text = "Apache-2.0" }
 
-
 authors = [
     { name = "Nikita Zalesov" }
 ]
 
+keywords = [
+    "moex",
+    "iss",
+    "moscow exchange",
+    "trading",
+    "finance",
+    "api",
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
+]
+
 
 dependencies = [
-
-    # HTTP
     "requests>=2.32",
     "httpx>=0.28",
-
-    # Data
-    "pandas>=2.3",
-    "numpy>=2.0",
-    "pyarrow>=17",
-
-    # Validation / config
-    "pydantic>=2.10",
-    "python-dotenv>=1.0",
-
-    # Reliability
-    "tenacity>=9"
-]
-
-
-[project.optional-dependencies]
-
-
-dev = [
-
-    # Lint / format
-    "ruff>=0.12",
-
-    # Type checking
-    "mypy>=1.16"
-]
-
-
-test = [
-
-    "pytest>=8.4",
-    "pytest-cov>=6.2",
-    "pytest-asyncio>=1.0",
-
-    # HTTP mocking
-    "responses>=0.25",
-    "respx>=0.22"
-]
-
-
-quant = [
-
-    "scipy>=1.14",
-    "scikit-learn>=1.6",
-    "statsmodels>=0.14",
-    "arch>=7.0",
-    "catboost>=1.2",
-    "optuna>=4.0"
+    "pandas>=2.2",
+    "tenacity>=9.0",
 ]
 
 
@@ -88,10 +58,24 @@ Homepage = "https://github.com/8bitniksis/moex_iss"
 
 Repository = "https://github.com/8bitniksis/moex_iss"
 
+Issues = "https://github.com/8bitniksis/moex_iss/issues"
 
-# ======================================================
+
+[tool.setuptools.packages.find]
+
+where = [
+    "."
+]
+
+
+[tool.setuptools_scm]
+
+version_file = "moex_iss/_version.py"
+
+
+# ---------------------
 # Ruff
-# ======================================================
+# ---------------------
 
 [tool.ruff]
 
@@ -103,28 +87,16 @@ line-length = 88
 [tool.ruff.lint]
 
 select = [
-
-    # pycodestyle
     "E",
-
-    # pyflakes
     "F",
-
-    # import sorting
     "I",
-
-    # bugbear
+    "UP",
     "B",
-
-    # pyupgrade
-    "UP"
+    "ANN",
 ]
 
-
 ignore = [
-
-    # временно, пока приводим код к типизации
-    "B008"
+    "ANN401",
 ]
 
 
@@ -132,43 +104,19 @@ ignore = [
 
 quote-style = "double"
 
-indent-style = "space"
 
-
-# ======================================================
-# MyPy
-# ======================================================
+# ---------------------
+# Mypy
+# ---------------------
 
 [tool.mypy]
 
 python_version = "3.13"
 
-check_untyped_defs = true
-
-warn_return_any = true
-
-warn_unused_ignores = true
-
-warn_redundant_casts = true
+strict = true
 
 warn_unused_configs = true
 
-ignore_missing_imports = true
-
-
-# постепенно включим strict после покрытия типов
-
-
-# ======================================================
-# Pytest
-# ======================================================
-
-[tool.pytest.ini_options]
-
-testpaths = [
-    "tests"
-]
-
-addopts = [
-    "-ra"
+exclude = [
+    "tests/",
 ]
