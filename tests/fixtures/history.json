@@ -1,0 +1,25 @@
+{
+    "history": {
+        "metadata": {},
+        "columns": [
+            "TRADEDATE",
+            "SECID",
+            "CLOSE",
+            "VOLUME"
+        ],
+        "data": [
+            [
+                "2025-01-01",
+                "SBER",
+                250.5,
+                100000
+            ],
+            [
+                "2025-01-02",
+                "SBER",
+                252.0,
+                120000
+            ]
+        ]
+    }
+}
