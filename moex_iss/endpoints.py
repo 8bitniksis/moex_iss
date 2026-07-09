@@ -1,35 +1,26 @@
+from typing import Any
 from urllib.parse import urlencode
 
 
 class EndpointBuilder:
-
     def __init__(
         self,
-        base_url: str
-    ):
+        base_url: str,
+    ) -> None:
         self.base_url = base_url.rstrip("/")
-
 
     def build(
         self,
         path: str,
-        params: dict | None = None
+        params: dict[str, Any] | None = None,
     ) -> str:
 
-        url = (
-            self.base_url
-            + "/iss"
-            + path
-            + ".json"
-        )
+        url = self.base_url + "/iss" + path + ".json"
 
         if params:
-
             url += "?" + urlencode(params)
 
         return url
-
-
 
     def candles(
         self,
@@ -37,32 +28,27 @@ class EndpointBuilder:
         market: str,
         board: str,
         security: str,
-        params=None
-    ):
+        params: dict[str, Any] | None = None,
+    ) -> str:
 
         path = (
-            f"/history/engines/{engine}"
+            f"/engines/{engine}"
             f"/markets/{market}"
             f"/boards/{board}"
             f"/securities/{security}"
             f"/candles"
         )
 
-        return self.build(
-            path,
-            params
-        )
-
-
+        return self.build(path, params)
 
     def history_security(
         self,
-        engine,
-        market,
-        board,
-        security,
-        params=None
-    ):
+        engine: str,
+        market: str,
+        board: str,
+        security: str,
+        params: dict[str, Any] | None = None,
+    ) -> str:
 
         path = (
             f"/history/engines/{engine}"
@@ -71,7 +57,4 @@ class EndpointBuilder:
             f"/securities/{security}"
         )
 
-        return self.build(
-            path,
-            params
-        )
+        return self.build(path, params)

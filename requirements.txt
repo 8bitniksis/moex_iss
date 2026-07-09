@@ -1,0 +1,23 @@
+# =====================================
+# MOEX ISS Client Runtime Dependencies
+# =====================================
+
+# HTTP
+requests>=2.31.0
+httpx>=0.27.0
+
+# Data processing
+pandas>=2.2.0
+numpy>=1.26.0
+
+# Parquet storage
+pyarrow>=16.0.0
+
+# Configuration
+python-dotenv>=1.0.0
+
+# Data validation
+pydantic>=2.7.0
+
+# Retry / fault tolerance
+tenacity>=8.2.0

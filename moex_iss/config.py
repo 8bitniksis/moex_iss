@@ -10,13 +10,9 @@ class ISSConfig:
     username: str | None = None
     password: str | None = None
 
-    base_url: str = (
-        "https://iss.moex.com"
-    )
+    base_url: str = "https://iss.moex.com"
 
-    auth_url: str = (
-        "https://passport.moex.com/authenticate"
-    )
+    auth_url: str = "https://passport.moex.com/authenticate"
 
     timeout: float = 10.0
 
@@ -24,16 +20,10 @@ class ISSConfig:
 
     verify_ssl: bool = True
 
-    user_agent: str = (
-        "moex-iss-python-client/1.0"
-    )
+    user_agent: str = "moex-iss-python-client/1.0"
 
     debug: bool = False
 
-
     @property
     def authenticated(self) -> bool:
-        return bool(
-            self.username
-            and self.password
-        )
+        return bool(self.username and self.password)

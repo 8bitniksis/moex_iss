@@ -1,42 +1,141 @@
 [build-system]
 requires = [
     "setuptools>=68",
-    "wheel"
+    "wheel",
+    "setuptools-scm>=8",
 ]
 build-backend = "setuptools.build_meta"
 
 
 [project]
 name = "moex-iss"
-version = "1.0.0"
+dynamic = ["version"]
+
 description = "Modern Python client for Moscow Exchange ISS API"
+
+readme = "README.md"
+
+requires-python = ">=3.13"
+
+license = { text = "Apache-2.0" }
+
 authors = [
-    {name="MOEX ISS Quant Tools"}
+    { name = "Nikita Zalesov" }
 ]
 
-requires-python = ">=3.11"
+keywords = [
+    "moex",
+    "iss",
+    "moscow exchange",
+    "trading",
+    "finance",
+    "api",
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
+]
+
 
 dependencies = [
-    "requests>=2.31",
-    "httpx>=0.27",
+    "requests>=2.32",
+    "httpx>=0.28",
     "pandas>=2.2",
-    "pydantic>=2.7",
-    "tenacity>=8.2",
-    "python-dotenv>=1.0"
-]
-
-
-[project.optional-dependencies]
-
-test = [
+    "tenacity>=9.0",
+    "ruff>=0.12",
+    "mypy>=1.16",
     "pytest>=8",
-    "pytest-cov",
-    "pytest-asyncio"
+    "pytest-cov>=6",
+    "build>=1.2",
+    "pandas-stubs",
+    "pytest-asyncio",
+    "responses",
+]
+
+[project.urls]
+
+Homepage = "https://github.com/8bitniksis/moex_iss"
+
+Repository = "https://github.com/8bitniksis/moex_iss"
+
+Issues = "https://github.com/8bitniksis/moex_iss/issues"
+
+
+[tool.setuptools.packages.find]
+
+where = [
+    "."
 ]
 
 
-dev = [
-    "black",
-    "ruff",
-    "mypy"
+[tool.setuptools_scm]
+
+version_file = "moex_iss/_version.py"
+
+
+# ---------------------
+# Ruff
+# ---------------------
+
+[tool.ruff]
+exclude = [
+    "moex_iss/_version.py",
+]
+target-version = "py313"
+
+line-length = 88
+
+
+[tool.ruff.lint]
+
+select = [
+    "E",
+    "F",
+    "I",
+    "UP",
+    "B",
+    "ANN",
+]
+
+ignore = [
+    "ANN401",
+]
+
+[tool.ruff.lint.per-file-ignores]
+
+"tests/**/*.py" = [
+    "ANN",
+]
+
+"examples/**/*.py" = [
+    "ANN",
+]
+
+
+[tool.ruff.format]
+
+quote-style = "double"
+
+
+# ---------------------
+# Mypy
+# ---------------------
+
+[tool.mypy]
+
+python_version = "3.13"
+
+strict = true
+
+warn_unused_configs = true
+
+exclude = [
+    "tests/",
 ]

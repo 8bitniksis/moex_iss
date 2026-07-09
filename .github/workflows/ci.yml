@@ -1,0 +1,106 @@
+name: CI
+
+on:
+
+  push:
+    branches:
+      - main
+      - develop
+
+  pull_request:
+    branches:
+      - main
+
+
+jobs:
+
+  quality:
+
+    name: Quality checks
+
+    runs-on: ubuntu-latest
+
+
+    strategy:
+
+      matrix:
+
+        python-version:
+          - "3.13"
+          - "3.14"
+
+
+    steps:
+
+      - name: Checkout repository
+
+        uses: actions/checkout@v4
+
+
+      - name: Setup Python
+
+        uses: actions/setup-python@v5
+
+        with:
+
+          python-version: ${{ matrix.python-version }}
+
+          cache: "pip"
+
+
+      - name: Upgrade pip
+
+        run:
+
+          python -m pip install --upgrade pip
+
+
+      - name: Install package
+
+        run:
+
+          pip install -e ".[dev]"
+
+
+      # -------------------------
+      # Lint
+      # -------------------------
+
+      - name: Ruff check
+
+        run:
+
+          ruff check .
+
+
+      - name: Ruff format check
+
+        run:
+
+          ruff format --check .
+
+      - name: MyPy
+
+        run: |
+
+          mypy --strict moex_iss
+
+      # -------------------------
+      # Tests
+      # -------------------------
+      
+      - name: Run tests
+
+        run: |
+          pytest \
+            --cov=moex_iss \
+            --cov-report=term-missing
+
+      # -------------------------
+      # Build package
+      # -------------------------
+
+      - name: Build package
+
+        run: |
+          python -m build
