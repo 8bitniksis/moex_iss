@@ -41,7 +41,7 @@ class EndpointBuilder:
     ):
 
         path = (
-            f"/history/engines/{engine}"
+            f"/engines/{engine}"
             f"/markets/{market}"
             f"/boards/{board}"
             f"/securities/{security}"
