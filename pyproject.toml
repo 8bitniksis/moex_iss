@@ -83,7 +83,9 @@ version_file = "moex_iss/_version.py"
 # ---------------------
 
 [tool.ruff]
-
+exclude = [
+    "moex_iss/_version.py",
+]
 target-version = "py313"
 
 line-length = 88
