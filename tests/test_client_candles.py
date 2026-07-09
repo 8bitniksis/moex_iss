@@ -10,9 +10,8 @@ def test_candles_request():
 
     url = (
         "https://iss.moex.com"
-        "/iss/history/engines/"
-        "stock/markets/shares/"
-        "boards/TQBR/"
+        "/iss/engines/stock/markets/"
+        "shares/boards/TQBR/"
         "securities/SBER/"
         "candles.json"
         "?interval=60"
