@@ -1,9 +1,7 @@
 [project]
 
 name = "moex-iss"
-
 version = "1.0.0"
-
 description = "Modern Python client for Moscow Exchange ISS API"
 
 requires-python = ">=3.14"
@@ -21,10 +19,23 @@ dependencies = [
 ]
 
 
+[project.optional-dependencies]
+
+dev = [
+    "ruff>=0.12",
+    "black>=25.1",
+    "mypy>=1.16"
+]
+
+test = [
+    "pytest>=8.4",
+    "pytest-cov>=6.2"
+]
+
+
 [tool.black]
 
 line-length = 88
-
 target-version = [
     "py314"
 ]
@@ -33,12 +44,18 @@ target-version = [
 [tool.ruff]
 
 target-version = "py314"
-
 line-length = 88
+
+lint.select = [
+    "E",
+    "F",
+    "I",
+    "UP",
+    "B"
+]
 
 
 [tool.mypy]
 
 python_version = "3.14"
-
 strict = true
