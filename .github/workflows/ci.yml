@@ -45,6 +45,8 @@ jobs:
 
           python-version: ${{ matrix.python-version }}
 
+          cache: "pip"
+
 
       - name: Upgrade pip
 
@@ -81,7 +83,7 @@ jobs:
 
         run: |
 
-          mypy moex_iss
+          mypy --strict moex_iss
 
       # -------------------------
       # Tests
@@ -93,3 +95,16 @@ jobs:
           pytest \
             --cov=moex_iss \
             --cov-report=term-missing
+            --cov-fail-under=80
+
+      # -------------------------
+      # Build package
+      # -------------------------
+
+      - name: Build package
+
+        run: |
+
+          python -m pip install build
+
+          python -m build
