@@ -28,12 +28,15 @@ from tenacity import (
     wait_exponential
 )
 
+from .limiter import RateLimiter
+
 class ISSClient:
 
 
     def __init__(
         self,
-        config: ISSConfig | None = None
+        config: ISSConfig | None = None,
+        rate_limit=5
     ):
 
         self.config = (
@@ -41,6 +44,9 @@ class ISSClient:
             or ISSConfig()
         )
 
+        self.limiter = RateLimiter(
+            rate_limit
+        )
 
         self.session = ISSSession(
             self.config
@@ -89,10 +95,12 @@ class ISSClient:
         self,
         url
     ):
-        response = (
-            self.session.get(url)
+        
+        self.limiter.wait()
+        
+        response = self.session.get(
+            url
         )
-
 
         if 500 <= response.status_code < 600:
             raise ISSServerError(
