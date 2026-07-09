@@ -2,7 +2,7 @@
 
 Modern Python client for **Moscow Exchange ISS API**.
 
-Проект предназначен для загрузки и обработки данных Московской биржи в задачах:
+Проект предназначен для загрузки, хранения и анализа данных Московской биржи в задачах:
 
 * quantitative trading
 * backtesting
@@ -14,10 +14,12 @@ Modern Python client for **Moscow Exchange ISS API**.
 Клиент предоставляет удобный интерфейс для работы с:
 
 * историческими данными
-* свечами
+* OHLCV свечами
 * рыночными данными
 * инструментами MOEX
-* futures и shares data
+* shares
+* futures
+* research datasets
 
 ---
 
@@ -25,40 +27,43 @@ Modern Python client for **Moscow Exchange ISS API**.
 
 ## Core
 
-✅ Python 3.11+
-✅ REST ISS API client
-✅ Sync API (`requests`)
-✅ Async API (`httpx`)
-✅ Automatic pagination
-✅ Retry mechanism
-✅ Rate limiting
-✅ JSON parsing
-✅ Pandas integration
-✅ Unit tests
-✅ Mock HTTP testing
+✅ Python 3.11+  
+✅ REST ISS API client  
+✅ Sync API (`requests`)  
+✅ Async API (`httpx`)  
+✅ Automatic pagination  
+✅ Retry mechanism  
+✅ Rate limiting  
+✅ JSON parsing  
+✅ Pandas integration  
+✅ Parquet export  
+✅ Unit tests  
+✅ Mock HTTP testing  
 
 ---
 
 # Architecture
 
-Проект построен как модульный клиент:
+Проект построен как модульный Python клиент:
 
 ```
+
 moex_iss/
 
 ├── client.py          # Основной ISS клиент
-├── async_client.py    # Async версия
+├── async_client.py    # Async версия клиента
 ├── auth.py            # MOEX Passport authentication
 ├── session.py         # HTTP session layer
 │
 ├── endpoints.py       # ISS URL builder
 ├── parser.py          # JSON parser
-├── pagination.py      # start pagination
-├── dataframe.py       # pandas adapters
+├── pagination.py      # Pagination logic
+├── dataframe.py       # Pandas adapters
 │
-├── limiter.py         # request rate limiter
-├── models.py          # data models
-├── exceptions.py      # custom exceptions
+├── limiter.py         # Request rate limiter
+├── models.py          # Data models
+├── exceptions.py      # Custom exceptions
+
 ```
 
 ---
@@ -71,13 +76,13 @@ moex_iss/
 git clone <repository>
 
 cd moex_iss
-```
+````
 
 ---
 
 ## Create virtual environment
 
-Windows:
+### Windows
 
 ```powershell
 python -m venv .venv
@@ -85,7 +90,7 @@ python -m venv .venv
 .venv\Scripts\activate
 ```
 
-Linux:
+### Linux
 
 ```bash
 python3 -m venv .venv
@@ -95,7 +100,7 @@ source .venv/bin/activate
 
 ---
 
-## Install dependencies
+# Install dependencies
 
 Runtime:
 
@@ -107,6 +112,12 @@ Development:
 
 ```bash
 pip install -r requirements-dev.txt
+```
+
+Quant research:
+
+```bash
+pip install -r requirements-quant.txt
 ```
 
 Install package:
@@ -138,7 +149,7 @@ print(data)
 
 ---
 
-# Historical data
+# Historical Data
 
 Example: SBER history
 
@@ -162,7 +173,7 @@ df = client.history_df(
 print(df.head())
 ```
 
-Result:
+Example:
 
 ```
 TRADEDATE     SECID     CLOSE     VOLUME
@@ -184,6 +195,15 @@ df = client.candles_df(
 )
 ```
 
+Поддерживаемые интервалы:
+
+```
+1    minute
+10   minutes
+60   minutes
+24   daily
+```
+
 Result:
 
 ```
@@ -195,8 +215,41 @@ Result:
 Данные готовы для:
 
 * indicators
+* feature engineering
+* machine learning
 * backtesting
-* ML models
+
+---
+
+# MOEX ISS Endpoints
+
+Пример корректных endpoint:
+
+Engines:
+
+```
+https://iss.moex.com/iss/engines.json
+```
+
+Markets:
+
+```
+https://iss.moex.com/iss/engines/stock/markets.json
+```
+
+Candles:
+
+```
+https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities/SBER/candles.json
+```
+
+Важно:
+
+```
+/iss/markets.json
+```
+
+не является существующим ISS endpoint.
 
 ---
 
@@ -204,7 +257,7 @@ Result:
 
 MOEX ISS ограничивает размер ответа.
 
-Клиент автоматически обрабатывает:
+Клиент автоматически поддерживает:
 
 ```
 start=0
@@ -226,7 +279,107 @@ for row in client.iter_history(
     print(row)
 ```
 
-Память не расходуется на загрузку всего датасета.
+Большие датасеты загружаются без переполнения памяти.
+
+---
+
+# Parquet Export
+
+Для хранения исторических данных используется формат Parquet.
+
+Требуется:
+
+```
+pyarrow
+```
+
+Пример:
+
+```python
+from pathlib import Path
+
+from moex_iss import ISSClient
+
+
+Path("data").mkdir(
+    exist_ok=True
+)
+
+
+client = ISSClient()
+
+
+df = client.candles_df(
+    "SBER",
+    interval=10
+)
+
+
+df.to_parquet(
+    "data/sber_10m.parquet"
+)
+```
+
+Результат:
+
+```
+data/
+
+└── sber_10m.parquet
+```
+
+Чтение:
+
+```python
+import pandas as pd
+
+
+df = pd.read_parquet(
+    "data/sber_10m.parquet"
+)
+```
+
+---
+
+# Async API
+
+Для параллельной загрузки:
+
+```python
+from moex_iss import AsyncISSClient
+
+
+async with AsyncISSClient() as client:
+
+    data = await client.get_json(
+        "https://iss.moex.com/iss/engines.json"
+    )
+```
+
+Использование:
+
+* multiple instruments
+* monitoring
+* batch download
+* realtime polling
+
+---
+
+# Rate Limiting
+
+Защита от ограничения MOEX ISS:
+
+```python
+client = ISSClient(
+    rate_limit=5
+)
+```
+
+означает:
+
+```
+5 requests / second
+```
 
 ---
 
@@ -258,47 +411,6 @@ client = ISSClient(
 
 ---
 
-# Async API
-
-Для параллельной загрузки:
-
-```python
-from moex_iss import AsyncISSClient
-
-
-async with AsyncISSClient() as client:
-
-    data = await client.get_json(
-        "https://iss.moex.com/iss/engines.json"
-    )
-```
-
-Использование:
-
-* monitoring
-* multiple instruments
-* realtime polling
-
----
-
-# Rate limiting
-
-Для защиты от ограничения ISS:
-
-```python
-client = ISSClient(
-    rate_limit=5
-)
-```
-
-означает:
-
-```
-5 requests / second
-```
-
----
-
 # Error Handling
 
 Клиент использует собственные исключения:
@@ -326,15 +438,37 @@ except ISSServerError:
 
 ---
 
+# Examples
+
+```
+examples/
+
+├── 03_get_candles.py
+├── 06_async_download.py
+└── 07_export_parquet.py
+```
+
+Запуск:
+
+```bash
+python examples/03_get_candles.py
+```
+
+или:
+
+```bash
+python examples/07_export_parquet.py
+```
+
+---
+
 # Testing
 
-Запуск тестов:
+Запуск:
 
 ```bash
 pytest -v
 ```
-
----
 
 Coverage:
 
@@ -344,7 +478,7 @@ pytest \
 --cov-report=term-missing
 ```
 
-HTML отчет:
+HTML:
 
 ```bash
 pytest \
@@ -352,17 +486,11 @@ pytest \
 --cov-report=html
 ```
 
-Открыть:
-
-```
-htmlcov/index.html
-```
-
 ---
 
 # Development
 
-Code formatting:
+Formatting:
 
 ```bash
 black .
@@ -382,7 +510,7 @@ mypy moex_iss
 
 ---
 
-# Quant Pipeline Usage
+# Quant Pipeline
 
 Типичный workflow:
 
@@ -398,6 +526,11 @@ ISSClient
     v
 
 Pandas DataFrame
+
+    |
+    v
+
+Parquet Storage
 
     |
     v
@@ -445,7 +578,9 @@ Trading System
 
 ## Infrastructure
 
-* [ ] parquet cache
+* [x] parquet export
+* [ ] parquet cache layer
+* [ ] incremental updates
 * [ ] Redis cache
 * [ ] Docker support
 * [ ] CI/CD pipeline
@@ -467,16 +602,26 @@ requests
 httpx
 pandas
 numpy
+pyarrow
 pydantic
 tenacity
-pytest
 ```
 
 ---
 
 # License
 
-MIT License
+Apache License 2.0
+
+Copyright (c) 2026
+
+Licensed under the Apache License, Version 2.0.
+
+You may obtain a copy of the License at:
+
+```
+https://www.apache.org/licenses/LICENSE-2.0
+```
 
 ---
 
