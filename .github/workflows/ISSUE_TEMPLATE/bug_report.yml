@@ -1,0 +1,65 @@
+
+name: Bug report
+description: Report a problem with moex_iss
+title: "[Bug]: "
+labels:
+  - bug
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug.
+        Please provide enough information to reproduce the issue.
+
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: "moex-iss 0.1.1"
+
+    validations:
+      required: true
+
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: "Python 3.13"
+
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Minimal example to reproduce the issue
+      placeholder: |
+        ```python
+        from moex_iss import Client
+
+        ...
+        ```
+
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / traceback
+      render: shell

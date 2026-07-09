@@ -1,0 +1,6 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: Documentation
+    url: https://github.com/8bitniksis/moex_iss#readme
+    about: Check documentation before opening an issue
