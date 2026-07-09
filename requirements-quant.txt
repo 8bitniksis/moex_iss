@@ -8,4 +8,3 @@ statsmodels>=0.14
 arch>=7.0
 catboost>=1.2
 optuna>=3.6
-pyarrow>=16
