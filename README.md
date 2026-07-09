@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/8bitniksis/moex_iss/actions/workflows/ci.yml/badge.svg)](https://github.com/8bitniksis/moex_iss/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/)
-[![License](https://img.shields.io/github/license/8bitniksis/moex_iss)](LICENSE.md)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Ruff](https://img.shields.io/badge/code%20style-ruff-black)](https://github.com/astral-sh/ruff)
 [![mypy](https://img.shields.io/badge/type%20checked-mypy-blue)](https://mypy-lang.org/)
 
