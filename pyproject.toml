@@ -92,8 +92,10 @@ where = ["src"]
 # =====================================================
 
 [tool.setuptools_scm]
-
 version_file = "src/moex_iss/_version.py"
+
+version_scheme = "guess-next-dev"
+local_scheme = "no-local-version"
 
 
 # =====================================================
