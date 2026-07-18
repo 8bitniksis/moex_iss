@@ -39,7 +39,7 @@ def main():
             .to_df()
     )
 
-    print(df)
+    print(result)
 
 
 if __name__ == "__main__":
