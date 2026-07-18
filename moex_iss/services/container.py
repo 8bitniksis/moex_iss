@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from .candles import CandleService
 from .history import HistoryService
+from .bonds import BondsService
 
 if TYPE_CHECKING:
     from ..client import ISSClient
@@ -20,3 +21,5 @@ class ServiceContainer:
         self.history = HistoryService(client)
 
         self.candles = CandleService(client)
+
+        self.bonds = BondsService(client)
