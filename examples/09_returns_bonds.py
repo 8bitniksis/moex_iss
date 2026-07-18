@@ -21,7 +21,7 @@ def main():
     # print(bond["DURATION"])
     # print(bond["ZSPREADBP"])
 
-    snapshot = client.services.bonds.snapshot("RU000A10AHU1")
+    snapshot = client.services.bonds.snapshot_df("RU000A10AHU1")
 
     print(snapshot)
 

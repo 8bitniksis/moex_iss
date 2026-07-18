@@ -87,3 +87,12 @@ class EndpointBuilder:
         )
 
         return self.build(path)
+    
+    def security(
+        self,
+        security: str,
+        params: dict[str, Any] | None = None,
+    ) -> str:
+        path = f"/securities/{security}"
+
+        return self.build(path, params)
