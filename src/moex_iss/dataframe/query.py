@@ -25,7 +25,7 @@ class Query:
         )
     """
 
-    def __init__(self, dataframe: pd.DataFrame):
+    def __init__(self, dataframe: pd.DataFrame) -> None:
         """
         Initialize Query with a DataFrame.
 
@@ -275,7 +275,7 @@ class GroupedQuery:
     Represents a grouped DataFrame for aggregation operations.
     """
 
-    def __init__(self, dataframe: pd.DataFrame, group_columns: list[str]):
+    def __init__(self, dataframe: pd.DataFrame, group_columns: list[str]) -> None:
         self._df = dataframe
         self._group_columns = group_columns
         self._grouped = dataframe.groupby(group_columns)
