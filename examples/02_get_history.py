@@ -1,4 +1,4 @@
-from moex_iss import ISSClient
+from moex_iss.clients.client import ISSClient
 
 
 def main():

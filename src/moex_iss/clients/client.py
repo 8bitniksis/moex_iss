@@ -9,22 +9,24 @@ from tenacity import (
     wait_exponential,
 )
 
-from .auth import ISSAuthenticator
-from .config import ISSConfig
-from .dataframe import ISSDataFrame
-from .endpoints import EndpointBuilder
-from .exceptions import (
+from moex_iss.auth import ISSAuthenticator
+from moex_iss.config import ISSConfig
+from moex_iss.endpoints import EndpointBuilder
+from moex_iss.services import ServiceContainer
+from moex_iss.sessions.session import ISSSession
+from moex_iss.utils.exceptions import (
     ISSConnectionError,
     ISSRateLimitError,
     ISSResponseError,
     ISSServerError,
 )
-from .limiter import RateLimiter
-from .pagination import ISSPaginator
-from .session import ISSSession
+from moex_iss.utils.limiter import RateLimiter
+from moex_iss.utils.pagination import ISSPaginator
 
 
 class ISSClient:
+    """Main ISS client."""
+
     def __init__(
         self,
         config: ISSConfig | None = None,
@@ -45,9 +47,16 @@ class ISSClient:
         if self.config.authenticated:
             self.auth.authenticate()
 
-        self.endpoint = EndpointBuilder(self.config.base_url)
+        self.endpoint = EndpointBuilder(
+            self.config.base_url,
+        )
 
         self.paginator = ISSPaginator(self)
+
+        #
+        # Services
+        #
+        self.services = ServiceContainer(self)
 
     @retry(
         retry=retry_if_exception_type(
@@ -79,10 +88,14 @@ class ISSClient:
             )
 
         if response.status_code == 429:
-            raise ISSRateLimitError("Too many requests")
+            raise ISSRateLimitError(
+                "Too many requests",
+            )
 
         if response.status_code >= 400:
-            raise ISSResponseError(response.status_code)
+            raise ISSResponseError(
+                response.status_code,
+            )
 
         response.raise_for_status()
 
@@ -104,6 +117,12 @@ class ISSClient:
 
         return self.get_json(url)
 
+    #
+    # ------------------------------------------------------------------
+    # Backward compatible API
+    # ------------------------------------------------------------------
+    #
+
     def iter_history(
         self,
         engine: str,
@@ -114,66 +133,14 @@ class ISSClient:
         till_date: str | None = None,
     ) -> Iterator[dict[str, Any]]:
 
-        params: dict[str, str] = {}
-
-        if from_date:
-            params["from"] = from_date
-
-        if till_date:
-            params["till"] = till_date
-
-        url = self.endpoint.history_security(
-            engine,
-            market,
-            board,
-            security,
-            params,
+        return self.services.history.iter(
+            engine=engine,
+            market=market,
+            board=board,
+            security=security,
+            from_date=from_date,
+            till_date=till_date,
         )
-
-        return self.paginator.iterate(
-            url,
-            "history",
-        )
-
-    def candles(
-        self,
-        security: str,
-        engine: str = "stock",
-        market: str = "shares",
-        board: str = "TQBR",
-        interval: int = 24,
-    ) -> dict[str, Any]:
-
-        url = self.endpoint.candles(
-            engine,
-            market,
-            board,
-            security,
-            {
-                "interval": interval,
-            },
-        )
-
-        return self.get_json(url)
-
-    def candles_df(
-        self,
-        security: str,
-        engine: str = "stock",
-        market: str = "shares",
-        board: str = "TQBR",
-        interval: int = 60,
-    ) -> pd.DataFrame:
-
-        raw = self.candles(
-            security,
-            engine,
-            market,
-            board,
-            interval,
-        )
-
-        return ISSDataFrame.candles(raw)
 
     def history_df(
         self,
@@ -185,15 +152,45 @@ class ISSClient:
         till_date: str | None = None,
     ) -> pd.DataFrame:
 
-        rows = list(
-            self.iter_history(
-                engine,
-                market,
-                board,
-                security,
-                from_date,
-                till_date,
-            )
+        return self.services.history.df(
+            engine=engine,
+            market=market,
+            board=board,
+            security=security,
+            from_date=from_date,
+            till_date=till_date,
         )
 
-        return pd.DataFrame(rows)
+    def candles(
+        self,
+        security: str,
+        engine: str = "stock",
+        market: str = "shares",
+        board: str = "TQBR",
+        interval: int = 24,
+    ) -> dict[str, Any]:
+
+        return self.services.candles.raw(
+            security=security,
+            engine=engine,
+            market=market,
+            board=board,
+            interval=interval,
+        )
+
+    def candles_df(
+        self,
+        security: str,
+        engine: str = "stock",
+        market: str = "shares",
+        board: str = "TQBR",
+        interval: int = 24,
+    ) -> pd.DataFrame:
+
+        return self.services.candles.df(
+            security=security,
+            engine=engine,
+            market=market,
+            board=board,
+            interval=interval,
+        )

@@ -1,4 +1,4 @@
-from moex_iss.parser import parse_block
+from moex_iss.utils.parser import parse_block
 
 
 def test_parse_history(iss_history_response):

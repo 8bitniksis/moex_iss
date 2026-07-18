@@ -2,7 +2,7 @@ from typing import Any
 
 import pandas as pd
 
-from .parser import parse_block
+from moex_iss.utils.parser import parse_block
 
 
 class ISSDataFrame:

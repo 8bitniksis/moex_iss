@@ -1,6 +1,6 @@
 from typing import Any
 
-from .models import ISSBlock
+from moex_iss.models import ISSBlock
 
 
 def parse_block(
