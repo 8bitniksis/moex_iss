@@ -1,4 +1,5 @@
 from moex_iss import ISSClient
+from moex_iss.services.bonds.query import Query
 
 
 def main():
@@ -21,7 +22,18 @@ def main():
     # print(bond["DURATION"])
     # print(bond["ZSPREADBP"])
 
-    snapshot = client.services.bonds.snapshot_df("RU000A10AHU1")
+    snapshot = client.services.bond.snapshot_df("RU000A10AHU1")
+    
+    result = (
+        Query(snapshot)
+            .where("LISTLEVEL <= 2")
+            .where("YIELD > 20")
+            .where("DURATION < 365")
+            .order_by_desc("YIELD")
+            .take(30)
+            .select("SECID", "SHORTNAME", "YIELD", "DURATION")
+            .to_df()
+    )
 
     print(snapshot)
 

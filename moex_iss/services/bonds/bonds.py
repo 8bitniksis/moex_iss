@@ -7,8 +7,7 @@ import pandas as pd
 
 from .base import BaseService
 
-
-class BondsService(BaseService):
+class BondService(BaseService):
     """Service for working with MOEX corporate and government bonds."""
 
     def raw(
@@ -46,11 +45,8 @@ class BondsService(BaseService):
             params=params,
         )
 
-        securities = raw["securities"]
-
-        return pd.DataFrame(
-            data=securities["data"],
-            columns=securities["columns"],
+        return self._dataframe(
+            raw["securities"],
         )
 
     def details(
@@ -79,13 +75,6 @@ class BondsService(BaseService):
     ) -> dict[str, Any]:
         """
         Return a normalized bond snapshot.
-
-        The snapshot combines information from:
-
-        - securities
-        - marketdata
-        - marketdata_yields
-        - description
         """
 
         raw = self.details(
@@ -94,7 +83,7 @@ class BondsService(BaseService):
             market=market,
         )
 
-        description = self._description(
+        description = self._security_description(
             security=security,
         )
 
@@ -336,103 +325,3 @@ class BondsService(BaseService):
                 "ADMISSION_TYPE"
             ),
         }
-    
-    def _table(
-        self,
-        raw: dict[str, Any],
-        block_name: str,
-    ) -> dict[str, Any]:
-        """
-        Convert an ISS table block into a dictionary.
-
-        Parameters
-        ----------
-        raw
-            Raw ISS response.
-        block_name
-            Name of the ISS block (e.g. "securities",
-            "marketdata", "marketdata_yields").
-
-        Returns
-        -------
-        dict[str, Any]
-            Dictionary containing the first row of the block.
-            Returns an empty dictionary if the block is missing
-            or contains no data.
-        """
-
-        block = raw.get(block_name)
-
-        if not block:
-            return {}
-
-        data = block.get("data")
-
-        if not data:
-            return {}
-
-        return dict(
-            zip(
-                block["columns"],
-                data[0],
-                strict=False,
-            )
-        )
-
-    def _description(
-        self,
-        security: str,
-    ) -> dict[str, Any]:
-        """
-        Load and normalize the ISS description block.
-
-        The MOEX description endpoint returns a table
-        containing NAME / VALUE pairs. This method converts
-        it into a regular dictionary for easier access.
-
-        Parameters
-        ----------
-        security
-            Security identifier.
-
-        Returns
-        -------
-        dict[str, Any]
-            Description fields indexed by field name.
-        """
-
-        url = self._client.endpoint.security(
-            security=security,
-            params={
-                "iss.only": "description",
-            },
-        )
-
-        raw = self._client.get_json(url)
-
-        block = raw.get("description")
-
-        if not block:
-            return {}
-
-        columns = block["columns"]
-
-        result: dict[str, Any] = {}
-
-        for row in block["data"]:
-
-            values = dict(
-                zip(
-                    columns,
-                    row,
-                    strict=False,
-                )
-            )
-
-            name = values.get("NAME") or values.get("name")
-            value = values.get("VALUE") or values.get("value")
-
-            if name is not None:
-                result[name] = value
-
-        return result

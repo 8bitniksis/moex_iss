@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from .candles import CandleService
-from .history import HistoryService
-from .bonds import BondsService
+from moex_iss.services.candles import CandleService
+from moex_iss.services.history import HistoryService
+from moex_iss.services.bonds import BondService
+
 
 if TYPE_CHECKING:
     from ..client import ISSClient
@@ -22,4 +23,4 @@ class ServiceContainer:
 
         self.candles = CandleService(client)
 
-        self.bonds = BondsService(client)
+        self.bond = BondService(client)
