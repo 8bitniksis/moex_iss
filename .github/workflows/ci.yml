@@ -76,7 +76,7 @@ jobs:
 
       - name: MyPy
         run: |
-          mypy --strict moex_iss
+          mypy --strict src
 
       # -------------------------
       # Tests
