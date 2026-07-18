@@ -58,3 +58,33 @@ class EndpointBuilder:
         )
 
         return self.build(path, params)
+
+    def bonds(
+        self,
+        engine: str = "stock",
+        market: str = "bonds",
+        params: dict[str, Any] | None = None,
+    ) -> str:
+        path = f"/engines/{engine}/markets/{market}/securities"
+
+        return self.build(path, params)
+
+    def bond(
+        self,
+        security: str,
+        engine: str = "stock",
+        market: str = "bonds",
+    ) -> str:
+
+        path = f"/engines/{engine}/markets/{market}/securities/{security}"
+
+        return self.build(path)
+
+    def security(
+        self,
+        security: str,
+        params: dict[str, Any] | None = None,
+    ) -> str:
+        path = f"/securities/{security}"
+
+        return self.build(path, params)

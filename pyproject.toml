@@ -7,20 +7,22 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 
+# =====================================================
+# Project
+# =====================================================
+
 [project]
 name = "moex-iss"
 dynamic = ["version"]
 
 description = "Modern Python client for Moscow Exchange ISS API"
-
 readme = "README.md"
-
 requires-python = ">=3.13"
 
 license = { text = "Apache-2.0" }
 
 authors = [
-    { name = "Nikita Zalesov" }
+    { name = "Nikita Zalesov" },
 ]
 
 keywords = [
@@ -43,54 +45,85 @@ classifiers = [
     "Typing :: Typed",
 ]
 
-
 dependencies = [
     "requests>=2.32",
     "httpx>=0.28",
     "pandas>=2.2",
     "tenacity>=9.0",
+]
+
+
+[project.optional-dependencies]
+
+dev = [
+    "build>=1.2",
     "ruff>=0.12",
     "mypy>=1.16",
     "pytest>=8",
     "pytest-cov>=6",
-    "build>=1.2",
-    "pandas-stubs",
     "pytest-asyncio",
     "responses",
+    "pandas-stubs",
 ]
 
+
 [project.urls]
-
 Homepage = "https://github.com/8bitniksis/moex_iss"
-
 Repository = "https://github.com/8bitniksis/moex_iss"
-
 Issues = "https://github.com/8bitniksis/moex_iss/issues"
+
+
+# =====================================================
+# setuptools
+# =====================================================
+
+[tool.setuptools]
+
+package-dir = { "" = "src" }
 
 
 [tool.setuptools.packages.find]
 
-where = [
-    "."
-]
+where = ["src"]
 
+
+# =====================================================
+# setuptools-scm
+# =====================================================
 
 [tool.setuptools_scm]
 
-version_file = "moex_iss/_version.py"
+version_file = "src/moex_iss/_version.py"
 
 
-# ---------------------
+# =====================================================
+# pytest
+# =====================================================
+
+[tool.pytest.ini_options]
+
+pythonpath = [
+    "src",
+]
+
+testpaths = [
+    "tests",
+]
+
+
+# =====================================================
 # Ruff
-# ---------------------
+# =====================================================
 
 [tool.ruff]
-exclude = [
-    "moex_iss/_version.py",
-]
-target-version = "py313"
 
+target-version = "py313"
 line-length = 88
+
+exclude = [
+    "src/moex_iss/_version.py",
+    "examples/**"
+]
 
 
 [tool.ruff.lint]
@@ -108,6 +141,7 @@ ignore = [
     "ANN401",
 ]
 
+
 [tool.ruff.lint.per-file-ignores]
 
 "tests/**/*.py" = [
@@ -124,18 +158,21 @@ ignore = [
 quote-style = "double"
 
 
-# ---------------------
-# Mypy
-# ---------------------
+# =====================================================
+# MyPy
+# =====================================================
 
 [tool.mypy]
-
 python_version = "3.13"
-
 strict = true
-
 warn_unused_configs = true
+mypy_path = "src"
+exclude = ["tests/"]
 
-exclude = [
-    "tests/",
+[[tool.mypy.overrides]]
+module = [
+    "moex_iss.services.*",
+]
+disable_error_code = [
+    "no-any-return",
 ]

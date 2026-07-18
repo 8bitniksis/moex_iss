@@ -2,7 +2,7 @@ import json
 
 import responses
 
-from moex_iss import ISSClient
+from moex_iss.clients.client import ISSClient
 
 
 @responses.activate

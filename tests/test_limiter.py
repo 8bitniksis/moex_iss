@@ -1,6 +1,6 @@
 import time
 
-from moex_iss.limiter import RateLimiter
+from moex_iss.utils.limiter import RateLimiter
 
 
 def test_rate_limiter():

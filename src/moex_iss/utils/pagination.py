@@ -1,7 +1,7 @@
 from collections.abc import Iterator
 from typing import Any
 
-from .exceptions import ISSPaginationError
+from moex_iss.utils.exceptions import ISSPaginationError
 
 
 class ISSPaginator:

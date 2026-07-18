@@ -1,6 +1,6 @@
 import pytest
 
-from moex_iss.exceptions import ISSServerError
+from moex_iss.utils.exceptions import ISSServerError
 
 
 def test_server_error():
