@@ -122,6 +122,7 @@ line-length = 88
 
 exclude = [
     "src/moex_iss/_version.py",
+    "examples/**"
 ]
 
 
