@@ -114,7 +114,7 @@ class BondService(BaseService):
         )
 
         return pd.DataFrame([snapshot])
-    
+
     def _build_snapshot(
         self,
         raw: dict[str, Any],
@@ -136,12 +136,10 @@ class BondService(BaseService):
             "SECNAME": sec.get("SECNAME"),
             "ISIN": sec.get("ISIN"),
             "REGNUMBER": sec.get("REGNUMBER"),
-
             # Bond classification
             "BONDTYPE": sec.get("BONDTYPE"),
             "BONDSUBTYPE": sec.get("BONDSUBTYPE"),
             "LISTLEVEL": sec.get("LISTLEVEL"),
-
             # Issue
             "FACEVALUE": sec.get("FACEVALUE"),
             "FACEUNIT": sec.get("FACEUNIT"),
@@ -149,39 +147,32 @@ class BondService(BaseService):
             "LOTVALUE": sec.get("LOTVALUE"),
             "ISSUESIZE": sec.get("ISSUESIZE"),
             "ISSUESIZEPLACED": sec.get("ISSUESIZEPLACED"),
-
             # Coupon
             "COUPONVALUE": sec.get("COUPONVALUE"),
             "COUPONPERCENT": sec.get("COUPONPERCENT"),
             "COUPONPERIOD": sec.get("COUPONPERIOD"),
             "NEXTCOUPON": sec.get("NEXTCOUPON"),
             "ACCRUEDINT": sec.get("ACCRUEDINT"),
-
             # Dates
             "SETTLEDATE": sec.get("SETTLEDATE"),
             "MATDATE": sec.get("MATDATE"),
             "OFFERDATE": sec.get("OFFERDATE"),
             "BUYBACKDATE": sec.get("BUYBACKDATE"),
-
             # Prices
             "LAST": md.get("LAST"),
             "BID": md.get("BID"),
             "OFFER": md.get("OFFER"),
             "WAPRICE": md.get("WAPRICE"),
             "PREVWAPRICE": sec.get("PREVWAPRICE"),
-
             # Yields
             "YIELD": md.get("YIELD"),
             "YIELDATWAPRICE": md.get("YIELDATWAPRICE"),
             "EFFECTIVEYIELD": yld.get("EFFECTIVEYIELD"),
-
             # Duration
             "DURATION": yld.get("DURATION"),
-
             # Credit spreads
             "ZSPREADBP": yld.get("ZSPREADBP"),
             "GSPREADBP": yld.get("GSPREADBP"),
-
             # Trading
             "NUMTRADES": md.get("NUMTRADES"),
             "VOLTODAY": md.get("VOLTODAY"),
@@ -189,13 +180,9 @@ class BondService(BaseService):
             "TRADINGSTATUS": md.get("TRADINGSTATUS"),
         }
 
-        snapshot.update(
-            self._computed_fields(snapshot)
-        )
+        snapshot.update(self._computed_fields(snapshot))
 
-        snapshot.update(
-            self._description_fields(description)
-        )
+        snapshot.update(self._description_fields(description))
 
         return snapshot
 
@@ -214,9 +201,7 @@ class BondService(BaseService):
         if matdate:
             maturity = date.fromisoformat(matdate)
 
-            result["DAYSTOREDEMPTION"] = (
-                maturity - date.today()
-            ).days
+            result["DAYSTOREDEMPTION"] = (maturity - date.today()).days
         else:
             result["DAYSTOREDEMPTION"] = None
 
@@ -225,9 +210,7 @@ class BondService(BaseService):
         if coupon:
             next_coupon = date.fromisoformat(coupon)
 
-            result["COUPONDAYSREMAIN"] = (
-                next_coupon - date.today()
-            ).days
+            result["COUPONDAYSREMAIN"] = (next_coupon - date.today()).days
         else:
             result["COUPONDAYSREMAIN"] = None
 
@@ -245,87 +228,26 @@ class BondService(BaseService):
         return {
             "NAME": description.get("NAME"),
             "TYPENAME": description.get("TYPENAME"),
-
             "EMITENTNAME": description.get("EMITENTNAME"),
             "INN": description.get("INN"),
-
-            "PRIMARY_BOARDID": description.get(
-                "PRIMARY_BOARDID"
-            ),
-
-            "PRIMARY_BOARD_TITLE": description.get(
-                "PRIMARY_BOARD_TITLE"
-            ),
-
-            "IS_COLLATERAL": description.get(
-                "IS_COLLATERAL"
-            ),
-
-            "IS_EXTERNAL": description.get(
-                "IS_EXTERNAL"
-            ),
-
-            "IS_RII": description.get(
-                "IS_RII"
-            ),
-
-            "EMITTER_ID": description.get(
-                "EMITTER_ID"
-            ),
-
-            "INCLUDEDBYMOEX": description.get(
-                "INCLUDEDBYMOEX"
-            ),
-
-            "IS_QUALIFIED_INVESTORS": description.get(
-                "IS_QUALIFIED_INVESTORS"
-            ),
-
-            "HIGH_RISK": description.get(
-                "HIGH_RISK"
-            ),
-
-            "COUPONFREQUENCY": description.get(
-                "COUPONFREQUENCY"
-            ),
-
-            "EVENINGSESSION": description.get(
-                "EVENINGSESSION"
-            ),
-
-            "MORNINGSESSION": description.get(
-                "MORNINGSESSION"
-            ),
-
-            "WEEKENDSESSION": description.get(
-                "WEEKENDSESSION"
-            ),
-
-            "SUSPENSION_LISTING": description.get(
-                "SUSPENSION_LISTING"
-            ),
-
-            "ISSUEDATE": description.get(
-                "ISSUEDATE"
-            ),
-
-            "INITIALFACEVALUE": description.get(
-                "INITIALFACEVALUE"
-            ),
-
-            "SECSUBTYPE": description.get(
-                "SECSUBTYPE"
-            ),
-
-            "STARTDATEMOEX": description.get(
-                "STARTDATEMOEX"
-            ),
-
-            "REPLBOND": description.get(
-                "REPLBOND"
-            ),
-
-            "ADMISSION_TYPE": description.get(
-                "ADMISSION_TYPE"
-            ),
+            "PRIMARY_BOARDID": description.get("PRIMARY_BOARDID"),
+            "PRIMARY_BOARD_TITLE": description.get("PRIMARY_BOARD_TITLE"),
+            "IS_COLLATERAL": description.get("IS_COLLATERAL"),
+            "IS_EXTERNAL": description.get("IS_EXTERNAL"),
+            "IS_RII": description.get("IS_RII"),
+            "EMITTER_ID": description.get("EMITTER_ID"),
+            "INCLUDEDBYMOEX": description.get("INCLUDEDBYMOEX"),
+            "IS_QUALIFIED_INVESTORS": description.get("IS_QUALIFIED_INVESTORS"),
+            "HIGH_RISK": description.get("HIGH_RISK"),
+            "COUPONFREQUENCY": description.get("COUPONFREQUENCY"),
+            "EVENINGSESSION": description.get("EVENINGSESSION"),
+            "MORNINGSESSION": description.get("MORNINGSESSION"),
+            "WEEKENDSESSION": description.get("WEEKENDSESSION"),
+            "SUSPENSION_LISTING": description.get("SUSPENSION_LISTING"),
+            "ISSUEDATE": description.get("ISSUEDATE"),
+            "INITIALFACEVALUE": description.get("INITIALFACEVALUE"),
+            "SECSUBTYPE": description.get("SECSUBTYPE"),
+            "STARTDATEMOEX": description.get("STARTDATEMOEX"),
+            "REPLBOND": description.get("REPLBOND"),
+            "ADMISSION_TYPE": description.get("ADMISSION_TYPE"),
         }

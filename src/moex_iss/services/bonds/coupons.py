@@ -30,9 +30,9 @@ class BondCouponService(BaseService):
         )
 
         return cast(
-                dict[str, Any],
-                self._client.get_json(url),
-            )
+            dict[str, Any],
+            self._client.get_json(url),
+        )
 
     def coupons(
         self,
@@ -118,9 +118,9 @@ class BondCouponService(BaseService):
         if df.empty:
             return df
 
-        return df[
-            pd.to_datetime(df["DATE"]).dt.date >= date.today()
-        ].reset_index(drop=True)
+        return df[pd.to_datetime(df["DATE"]).dt.date >= date.today()].reset_index(
+            drop=True
+        )
 
     @staticmethod
     def _block_to_dataframe(

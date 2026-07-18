@@ -119,9 +119,7 @@ class Query:
 
     def drop(self, *columns: str) -> Query:
         """Drop specified columns."""
-        self._df = self._df.drop(
-            columns=[c for c in columns if c in self._df.columns]
-        )
+        self._df = self._df.drop(columns=[c for c in columns if c in self._df.columns])
         return self
 
     def rename(self, **mapping: str) -> Query:
@@ -280,7 +278,10 @@ class GroupedQuery:
         self._group_columns = group_columns
         self._grouped = dataframe.groupby(group_columns)
 
-    def agg(self, **kwargs: Any,) -> pd.DataFrame:
+    def agg(
+        self,
+        **kwargs: Any,
+    ) -> pd.DataFrame:
         """
         Aggregate with named operations.
 

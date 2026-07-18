@@ -19,7 +19,7 @@ class HistoryService(BaseService):
         security: str,
         from_date: str | None = None,
         till_date: str | None = None,
-    ) -> Iterator[dict[str, Any]] :
+    ) -> Iterator[dict[str, Any]]:
 
         params: dict[str, str] = {}
 

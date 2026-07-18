@@ -14,9 +14,7 @@ class BondFilter(BaseFilter):
         Filter by security identifiers.
         """
 
-        self._filters.append(
-            lambda df: df["SECID"].isin(secids)
-        )
+        self._filters.append(lambda df: df["SECID"].isin(secids))
 
         return self
 
@@ -28,9 +26,7 @@ class BondFilter(BaseFilter):
         Filter by ISIN.
         """
 
-        self._filters.append(
-            lambda df: df["ISIN"].isin(isins)
-        )
+        self._filters.append(lambda df: df["ISIN"].isin(isins))
 
         return self
 
@@ -42,9 +38,7 @@ class BondFilter(BaseFilter):
         Filter by quotation list level.
         """
 
-        self._filters.append(
-            lambda df: df["LISTLEVEL"].isin(levels)
-        )
+        self._filters.append(lambda df: df["LISTLEVEL"].isin(levels))
 
         return self
 
@@ -56,8 +50,6 @@ class BondFilter(BaseFilter):
         Filter by face value currency.
         """
 
-        self._filters.append(
-            lambda df: df["FACEUNIT"].isin(currencies)
-        )
+        self._filters.append(lambda df: df["FACEUNIT"].isin(currencies))
 
         return self

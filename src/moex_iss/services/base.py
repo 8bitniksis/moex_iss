@@ -105,7 +105,6 @@ class BaseService:
         result: dict[str, Any] = {}
 
         for row in block["data"]:
-
             values = dict(
                 zip(
                     columns,

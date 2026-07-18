@@ -111,11 +111,7 @@ class BondAnalyticsService(BaseService):
             .sort_index()
         )
 
-        return (
-            distribution.rename("COUNT")
-            .rename_axis("BUCKET")
-            .reset_index()
-        )
+        return distribution.rename("COUNT").rename_axis("BUCKET").reset_index()
 
     def maturity_distribution(
         self,
@@ -157,11 +153,7 @@ class BondAnalyticsService(BaseService):
             .sort_index()
         )
 
-        return (
-            distribution.rename("COUNT")
-            .rename_axis("BUCKET")
-            .reset_index()
-        )
+        return distribution.rename("COUNT").rename_axis("BUCKET").reset_index()
 
     def liquidity_distribution(
         self,
@@ -182,8 +174,4 @@ class BondAnalyticsService(BaseService):
             .sort_index()
         )
 
-        return (
-            distribution.rename("COUNT")
-            .rename_axis("BUCKET")
-            .reset_index()
-        )
+        return distribution.rename("COUNT").rename_axis("BUCKET").reset_index()
