@@ -93,7 +93,7 @@ where = ["src"]
 
 [tool.setuptools_scm]
 write_to = "src/moex_iss/_version.py"
-version_scheme = "release-branch-semver"
+version_scheme = "post-release"
 local_scheme = "no-local-version"
 
 
