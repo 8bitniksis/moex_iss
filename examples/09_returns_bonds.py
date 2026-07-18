@@ -1,5 +1,5 @@
 from moex_iss import ISSClient
-from moex_iss.services.bonds.query import Query
+from moex_iss.dataframe.query import Query
 
 
 def main():

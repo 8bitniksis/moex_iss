@@ -1,7 +1,8 @@
 # moex_iss/dataframe/query.py
 from __future__ import annotations
 
-from typing import Any, Callable, List, Optional, Union
+from collections.abc import Callable
+from typing import Any, cast
 
 import pandas as pd
 
@@ -52,7 +53,7 @@ class Query:
             raise ValueError("Query result is empty, cannot get first row")
         return self._df.iloc[0]
 
-    def first_or_none(self) -> Optional[pd.Series]:
+    def first_or_none(self) -> pd.Series | None:
         """Return the first row as a Series, or None if empty."""
         if self._df.empty:
             return None
@@ -73,18 +74,14 @@ class Query:
             )
         return self._df.iloc[0]
 
-    def to_list(self) -> List[dict]:
-        """Return rows as a list of dictionaries."""
-        return self._df.to_dict(orient="records")
-
     # =========================================================================
     # Filtering
     # =========================================================================
 
     def where(
         self,
-        condition: Union[str, Callable[[pd.DataFrame], pd.Series]],
-    ) -> "Query":
+        condition: str | Callable[[pd.DataFrame], pd.Series],
+    ) -> Query:
         """
         Filter rows by condition.
 
@@ -107,7 +104,7 @@ class Query:
     # Projection
     # =========================================================================
 
-    def select(self, *columns: str) -> "Query":
+    def select(self, *columns: str) -> Query:
         """
         Select specific columns.
 
@@ -120,14 +117,14 @@ class Query:
         self._df = self._df.loc[:, list(columns)]
         return self
 
-    def drop(self, *columns: str) -> "Query":
+    def drop(self, *columns: str) -> Query:
         """Drop specified columns."""
         self._df = self._df.drop(
             columns=[c for c in columns if c in self._df.columns]
         )
         return self
 
-    def rename(self, **mapping: str) -> "Query":
+    def rename(self, **mapping: str) -> Query:
         """
         Rename columns.
 
@@ -141,7 +138,7 @@ class Query:
         self,
         name: str,
         func: Callable[[pd.DataFrame], pd.Series],
-    ) -> "Query":
+    ) -> Query:
         """
         Add a new computed column.
 
@@ -160,19 +157,19 @@ class Query:
         self,
         column: str,
         ascending: bool = True,
-    ) -> "Query":
+    ) -> Query:
         """Sort by column ascending."""
         self._df = self._df.sort_values(column, ascending=ascending)
         return self
 
-    def order_by_desc(self, column: str) -> "Query":
+    def order_by_desc(self, column: str) -> Query:
         """Sort by column descending."""
         return self.order_by(column, ascending=False)
 
     def order_by_many(
         self,
         *columns: tuple[str, bool],
-    ) -> "Query":
+    ) -> Query:
         """
         Sort by multiple columns.
 
@@ -188,17 +185,17 @@ class Query:
     # Pagination
     # =========================================================================
 
-    def take(self, count: int) -> "Query":
+    def take(self, count: int) -> Query:
         """Take first N rows."""
         self._df = self._df.head(count)
         return self
 
-    def skip(self, count: int) -> "Query":
+    def skip(self, count: int) -> Query:
         """Skip first N rows."""
         self._df = self._df.iloc[count:]
         return self
 
-    def page(self, page_number: int, page_size: int) -> "Query":
+    def page(self, page_number: int, page_size: int) -> Query:
         """
         Get specific page (1-indexed).
 
@@ -213,7 +210,7 @@ class Query:
     # Distinct
     # =========================================================================
 
-    def distinct(self, *columns: str) -> "Query":
+    def distinct(self, *columns: str) -> Query:
         """
         Remove duplicate rows.
 
@@ -229,7 +226,7 @@ class Query:
     # Grouping
     # =========================================================================
 
-    def group_by(self, *columns: str) -> "GroupedQuery":
+    def group_by(self, *columns: str) -> GroupedQuery:
         """
         Group by columns. Returns GroupedQuery for aggregation.
 
@@ -278,12 +275,12 @@ class GroupedQuery:
     Represents a grouped DataFrame for aggregation operations.
     """
 
-    def __init__(self, dataframe: pd.DataFrame, group_columns: List[str]):
+    def __init__(self, dataframe: pd.DataFrame, group_columns: list[str]):
         self._df = dataframe
         self._group_columns = group_columns
         self._grouped = dataframe.groupby(group_columns)
 
-    def agg(self, **kwargs) -> pd.DataFrame:
+    def agg(self, **kwargs: Any,) -> pd.DataFrame:
         """
         Aggregate with named operations.
 
@@ -294,7 +291,8 @@ class GroupedQuery:
                 count=("SECID", "count"),
             )
         """
-        return self._grouped.agg(**kwargs).reset_index()
+        result = self._grouped.agg(**kwargs).reset_index()
+        return cast(pd.DataFrame, result)
 
     def count(self) -> pd.DataFrame:
         """Count rows in each group."""
@@ -307,7 +305,3 @@ class GroupedQuery:
     def mean(self, column: str) -> pd.DataFrame:
         """Mean of column by group."""
         return self._grouped[column].mean().reset_index()
-
-    def to_df(self) -> pd.DataFrame:
-        """Return grouped DataFrame (for custom operations)."""
-        return self._grouped

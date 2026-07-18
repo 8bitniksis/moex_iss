@@ -2,7 +2,7 @@ from typing import Any, cast
 
 import httpx
 
-from .config import ISSConfig
+from moex_iss.config import ISSConfig
 
 
 class AsyncISSClient:

@@ -9,7 +9,7 @@ class BondFilter(BaseFilter):
     def secid(
         self,
         *secids: str,
-    ) -> "BondFilter":
+    ) -> BondFilter:
         """
         Filter by security identifiers.
         """
@@ -23,7 +23,7 @@ class BondFilter(BaseFilter):
     def isin(
         self,
         *isins: str,
-    ) -> "BondFilter":
+    ) -> BondFilter:
         """
         Filter by ISIN.
         """
@@ -37,7 +37,7 @@ class BondFilter(BaseFilter):
     def list_level(
         self,
         *levels: int,
-    ) -> "BondFilter":
+    ) -> BondFilter:
         """
         Filter by quotation list level.
         """
@@ -51,7 +51,7 @@ class BondFilter(BaseFilter):
     def currency(
         self,
         *currencies: str,
-    ) -> "BondFilter":
+    ) -> BondFilter:
         """
         Filter by face value currency.
         """

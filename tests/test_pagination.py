@@ -1,4 +1,4 @@
-from moex_iss.pagination import ISSPaginator
+from moex_iss.utils.pagination import ISSPaginator
 
 
 class MockClient:

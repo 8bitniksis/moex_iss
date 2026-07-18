@@ -9,19 +9,19 @@ from tenacity import (
     wait_exponential,
 )
 
-from .auth import ISSAuthenticator
-from .config import ISSConfig
-from .endpoints import EndpointBuilder
-from .exceptions import (
+from moex_iss.auth import ISSAuthenticator
+from moex_iss.config import ISSConfig
+from moex_iss.endpoints import EndpointBuilder
+from moex_iss.services import ServiceContainer
+from moex_iss.sessions.session import ISSSession
+from moex_iss.utils.exceptions import (
     ISSConnectionError,
     ISSRateLimitError,
     ISSResponseError,
     ISSServerError,
 )
-from .limiter import RateLimiter
-from .pagination import ISSPaginator
-from .services import ServiceContainer
-from .session import ISSSession
+from moex_iss.utils.limiter import RateLimiter
+from moex_iss.utils.pagination import ISSPaginator
 
 
 class ISSClient:

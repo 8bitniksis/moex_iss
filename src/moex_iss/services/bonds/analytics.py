@@ -4,6 +4,7 @@ import pandas as pd
 
 from moex_iss.services.base import BaseService
 
+
 class BondAnalyticsService(BaseService):
     """
     Analytics for bond DataFrames.

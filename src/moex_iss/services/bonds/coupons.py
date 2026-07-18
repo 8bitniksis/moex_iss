@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 from datetime import date
-from typing import Any
+from typing import Any, cast
 
 import pandas as pd
 
 from moex_iss.services.base import BaseService
+
 
 class BondCouponService(BaseService):
     """
@@ -28,7 +29,10 @@ class BondCouponService(BaseService):
             security=security,
         )
 
-        return self._client.get_json(url)
+        return cast(
+                dict[str, Any],
+                self._client.get_json(url),
+            )
 
     def coupons(
         self,

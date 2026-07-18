@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from typing import Any
+
 import pandas as pd
 
-from ..dataframe import ISSDataFrame
-from .base import BaseService
+from moex_iss.dataframe import ISSDataFrame
+from moex_iss.services.base import BaseService
 
 
 class CandleService(BaseService):
@@ -16,7 +18,7 @@ class CandleService(BaseService):
         market: str = "shares",
         board: str = "TQBR",
         interval: int = 24,
-    ) -> dict:
+    ) -> dict[str, Any]:
 
         url = self._client.endpoint.candles(
             engine=engine,

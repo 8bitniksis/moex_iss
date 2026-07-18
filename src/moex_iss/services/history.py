@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from collections.abc import Iterator
+from typing import Any
 
 import pandas as pd
 
-from .base import BaseService
+from moex_iss.services.base import BaseService
 
 
 class HistoryService(BaseService):
@@ -18,7 +19,7 @@ class HistoryService(BaseService):
         security: str,
         from_date: str | None = None,
         till_date: str | None = None,
-    ) -> Iterator[dict]:
+    ) -> Iterator[dict[str, Any]] :
 
         params: dict[str, str] = {}
 

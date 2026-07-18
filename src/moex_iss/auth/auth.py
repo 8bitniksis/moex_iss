@@ -1,8 +1,8 @@
 import base64
 
-from .config import ISSConfig
-from .exceptions import ISSAuthenticationError
-from .session import ISSSession
+from moex_iss.config import ISSConfig
+from moex_iss.sessions.session import ISSSession
+from moex_iss.utils.exceptions import ISSAuthenticationError
 
 
 class ISSAuthenticator:

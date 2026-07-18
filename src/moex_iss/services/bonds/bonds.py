@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 from datetime import date
-from typing import Any
+from typing import Any, cast
 
 import pandas as pd
 
-from .base import BaseService
+from moex_iss.services.base import BaseService
+
 
 class BondService(BaseService):
     """Service for working with MOEX corporate and government bonds."""
@@ -27,7 +28,10 @@ class BondService(BaseService):
             params=params,
         )
 
-        return self._client.get_json(url)
+        return cast(
+            dict[str, Any],
+            self._client.get_json(url),
+        )
 
     def df(
         self,

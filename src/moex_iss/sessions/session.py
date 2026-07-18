@@ -3,7 +3,7 @@ from typing import Any
 import requests
 from requests import Response
 
-from .config import ISSConfig
+from moex_iss.config import ISSConfig
 
 
 class ISSSession:
