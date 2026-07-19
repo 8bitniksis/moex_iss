@@ -168,6 +168,8 @@ class ISSClient:
         market: str = "shares",
         board: str = "TQBR",
         interval: int = 24,
+        from_date: str | None = None,
+        till_date: str | None = None,
     ) -> dict[str, Any]:
 
         return self.services.candles.raw(
@@ -176,7 +178,8 @@ class ISSClient:
             market=market,
             board=board,
             interval=interval,
-        )
+            from_date=from_date,
+            till_date=till_date,)
 
     def candles_df(
         self,
@@ -185,6 +188,8 @@ class ISSClient:
         market: str = "shares",
         board: str = "TQBR",
         interval: int = 24,
+        from_date: str | None = None,
+        till_date: str | None = None,
     ) -> pd.DataFrame:
 
         return self.services.candles.df(
@@ -193,4 +198,6 @@ class ISSClient:
             market=market,
             board=board,
             interval=interval,
+            from_date=from_date,
+            till_date=till_date,
         )
