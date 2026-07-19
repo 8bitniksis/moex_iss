@@ -92,8 +92,9 @@ where = ["src"]
 # =====================================================
 
 [tool.setuptools_scm]
-
-version_file = "src/moex_iss/_version.py"
+write_to = "src/moex_iss/_version.py"
+version_scheme = "post-release"
+local_scheme = "no-local-version"
 
 
 # =====================================================
